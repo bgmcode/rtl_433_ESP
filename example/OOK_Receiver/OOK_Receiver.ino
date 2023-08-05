@@ -6,6 +6,59 @@
 #include <ArduinoJson.h>
 #include <ArduinoLog.h>
 #include <rtl_433_ESP.h>
+#include <Wire.h>  // Only needed for Arduino 1.6.5 and earlier
+#include "SSD1306Wire.h" // legacy include: `#include "SSD1306.h"`
+// or #include "SH1106Wire.h", legacy include: `#include "SH1106.h"`
+// For a connection via I2C using brzo_i2c (must be installed) include
+// #include <brzo_i2c.h> // Only needed for Arduino 1.6.5 and earlier
+// #include "SSD1306Brzo.h"
+// #include "SH1106Brzo.h"
+// For a connection via SPI include
+// #include <SPI.h> // Only needed for Arduino 1.6.5 and earlier
+// #include "SSD1306Spi.h"
+// #include "SH1106SPi.h"
+
+// Include the UI lib
+#include "OLEDDisplayUi.h"
+
+// Install https://github.com/PaulStoffregen/Time
+#include <TimeLib.h>
+
+
+const uint8_t activeSymbol[] PROGMEM = {
+    B00000000,
+    B00000000,
+    B00011000,
+    B00100100,
+    B01000010,
+    B01000010,
+    B00100100,
+    B00011000
+};
+
+const uint8_t inactiveSymbol[] PROGMEM = {
+    B00000000,
+    B00000000,
+    B00000000,
+    B00000000,
+    B00011000,
+    B00011000,
+    B00000000,
+    B00000000
+};
+
+
+SSD1306Wire display(0x3c, SDA, SCL);   // ADDRESS, SDA, SCL  -  SDA and SCL usually populate automatically based on your board's pins_arduino.h e.g. https://github.com/esp8266/Arduino/blob/master/variants/nodemcu/pins_arduino.h
+// SH1106Wire display(0x3c, SDA, SCL);
+
+OLEDDisplayUi ui ( &display );
+
+int screenW = 128;
+int screenH = 64;
+int clockCenterX = screenW / 2;
+int clockCenterY = ((screenH - 16) / 2) + 16; // top yellow part is 16 px height
+int clockRadius = 23;
+
 
 #ifndef RF_MODULE_FREQUENCY
 #  define RF_MODULE_FREQUENCY 433.92
@@ -42,6 +95,42 @@ void logJson(JsonObject& jsondata) {
 #endif
 }
 
+// utility function for digital clock display: prints leading 0
+String twoDigits(int digits) {
+  if (digits < 10) {
+    String i = '0' + String(digits);
+    return i;
+  }
+  else {
+    return String(digits);
+  }
+}
+
+
+void clockOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
+
+}
+
+void digitalClockFrame(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
+  String timenow = String(hour()) + ":" + twoDigits(minute()) + ":" + twoDigits(second());
+  display->setTextAlignment(TEXT_ALIGN_CENTER);
+  display->setFont(ArialMT_Plain_24);
+  display->drawString(clockCenterX + x , clockCenterY + y, timenow );
+}
+
+
+// This array keeps function pointers to all frames
+// frames are the single views that slide in
+FrameCallback frames[] = { digitalClockFrame };
+
+// how many frames are there?
+int frameCount = 1;
+
+// Overlays are statically drawn on top of a frame eg. a clock
+OverlayCallback overlays[] = { clockOverlay };
+int overlaysCount = 1;
+
+
 void setup() {
   Serial.begin(921600);
   delay(1000);
@@ -56,6 +145,33 @@ void setup() {
   rf.enableReceiver();
   Log.notice(F("****** setup complete ******" CR));
   rf.getModuleStatus();
+
+
+    ui.setTargetFPS(60);
+  ui.setActiveSymbol(activeSymbol);
+  ui.setInactiveSymbol(inactiveSymbol);
+
+  // You can change this to
+  // TOP, LEFT, BOTTOM, RIGHT
+  ui.setIndicatorPosition(TOP);
+
+  // Defines where the first frame is located in the bar.
+  ui.setIndicatorDirection(LEFT_RIGHT);
+
+  // You can change the transition that is used
+  // SLIDE_LEFT, SLIDE_RIGHT, SLIDE_UP, SLIDE_DOWN
+  ui.setFrameAnimation(SLIDE_LEFT);
+
+  // Add frames
+  ui.setFrames(frames, frameCount);
+
+  // Add overlays
+  ui.setOverlays(overlays, overlaysCount);
+
+  // Initialising the UI will init the display too.
+  ui.init();
+
+  display.flipScreenVertically();
 }
 
 unsigned long uptime() {
@@ -108,6 +224,8 @@ float step = stepMin;
 
 void loop() {
   rf.loop();
+ui.update();
+
 #if defined(setBitrate) || defined(setFreqDev) || defined(setRxBW)
   char stepPrint[8];
   if (uptime() > next) {
