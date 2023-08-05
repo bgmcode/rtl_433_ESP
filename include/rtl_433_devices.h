@@ -179,6 +179,7 @@
     DECL(sensible_living)            \
     DECL(rainpoint)                  \
     DECL(regency_fan)                \
+    DECL(reolink_doorbell)           \
     DECL(revolt_nc5462)              \
     DECL(rftech)                     \
     DECL(rojaflex)                   \
@@ -247,7 +248,7 @@
     DECL(x10_sec)                    \
     DECL(yale_hsa)                   \
     /* Add new decoders here. */
-#  define NUMOF_OOK_DEVICES 157
+#  define NUMOF_OOK_DEVICES 158
 #  define NUMOF_FSK_DEVICES 80
 /* Add new decoders here. */
 #else
