@@ -56,7 +56,7 @@ OLEDDisplayUi ui ( &display );
 int screenW = 128;
 int screenH = 64;
 int clockCenterX = screenW / 2;
-int clockCenterY = ((screenH - 16) / 2) + 16; // top yellow part is 16 px height
+int clockCenterY = ((screenH/12)); // - 16) / 2) + 16; // top yellow part is 16 px height
 int clockRadius = 23;
 
 
@@ -67,6 +67,7 @@ int clockRadius = 23;
 #define JSON_MSG_BUFFER 512
 
 char messageBuffer[JSON_MSG_BUFFER];
+char messageBufferDisp[JSON_MSG_BUFFER];
 
 rtl_433_ESP rf; // use -1 to disable transmitter
 
@@ -76,7 +77,15 @@ void rtl_433_Callback(char* message) {
   DynamicJsonBuffer jsonBuffer2(JSON_MSG_BUFFER);
   JsonObject& RFrtl_433_ESPdata = jsonBuffer2.parseObject(message);
   logJson(RFrtl_433_ESPdata);
+  updateDisplay(RFrtl_433_ESPdata);
   count++;
+}
+void updateDisplay(JsonObject& jsondata) {
+
+
+jsondata.printTo(messageBufferDisp,jsondata.measureLength() + 1);
+
+
 }
 
 void logJson(JsonObject& jsondata) {
@@ -106,6 +115,36 @@ String twoDigits(int digits) {
   }
 }
 
+void jsonOverlay(OLEDDisplay *display, OLEDDisplayUiState* state)
+{
+}
+
+
+void jsonFrame(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
+  
+ // char tmpjson[] = "'model':'Oregon-CM180i','id':128,'battery_ok':1,'power1_W':48,'power2_W':9289,'power3_W':8243,'sequence':9,'protocol':'Oregon Scientific Weather Sensor','rssi':-87,'duration':288001'";
+  String jsonnow = "";
+
+int lineLength = 20;
+
+  for(int i = 0; i<sizeof(messageBufferDisp); i++)
+  {
+    if((i%lineLength) == 0)
+    {
+
+      jsonnow.concat("\n");
+     
+    }
+
+      jsonnow.concat(messageBufferDisp[i]);
+  
+  }
+
+
+  display->setTextAlignment(TEXT_ALIGN_CENTER);
+  display->setFont(ArialMT_Plain_10);
+  display->drawString(clockCenterX + x , clockCenterY + y, jsonnow);
+}
 
 void clockOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
 
@@ -121,13 +160,13 @@ void digitalClockFrame(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t 
 
 // This array keeps function pointers to all frames
 // frames are the single views that slide in
-FrameCallback frames[] = { digitalClockFrame };
+FrameCallback frames[] = { jsonFrame };
 
 // how many frames are there?
 int frameCount = 1;
 
 // Overlays are statically drawn on top of a frame eg. a clock
-OverlayCallback overlays[] = { clockOverlay };
+OverlayCallback overlays[] = { jsonOverlay };
 int overlaysCount = 1;
 
 

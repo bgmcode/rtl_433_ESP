@@ -85,6 +85,8 @@ static int smoke_gs558_callback(r_device *decoder, bitbuffer_t *bitbuffer)
 
     if (bitbuffer->bits_per_row[r] > 4 * 8)
         return DECODE_ABORT_LENGTH;
+        
+        return DECODE_FAIL_SANITY; // reject min/max to reduce false positives
 
     b = bitbuffer->bb[r];
 

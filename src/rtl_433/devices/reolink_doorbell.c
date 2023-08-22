@@ -95,10 +95,11 @@ static int reolink_doorbell_callback(r_device* decoder, bitbuffer_t* bitbuffer) 
         continue;
       }
 
-      raw = code = ((b[0]) << 20) | (b[1] << 12) | (b[2] << 4) | (b[3] >> 4);
-      code = (b[0] << 12) | (b[1] << 4) | (b[2] >> 4);
-
-      if (code == 0)
+    //  raw = code = ((b[0]) << 20) | (b[1] << 12) | (b[2] << 4) | (b[3] >> 4);
+    //  code = (b[0] << 12) | (b[1] << 4) | (b[2] >> 4);
+      raw = code = ((b[0]) << 16) | (b[1] << 8) | (b[2] << 0);
+      code = (b[0] << 16) | (b[1] << 8) | (b[2] >> 0);
+      if (code != 0x5aa6ad)
         return 0; // Abort early for bad signal
 
       sprintf(code_str, "%06x", code);
