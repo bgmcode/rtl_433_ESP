@@ -73,11 +73,29 @@ rtl_433_ESP rf; // use -1 to disable transmitter
 
 int count = 0;
 
+
+double timer_sec = 0;
+double startTime = 0;
+
+void resetTimer()
+{
+  startTime = millis();
+  timer_sec = 0;
+}
+
+void updateTimer()
+{
+  timer_sec = (millis() - startTime)/1000.0f;
+}
+
+
 void rtl_433_Callback(char* message) {
   DynamicJsonBuffer jsonBuffer2(JSON_MSG_BUFFER);
   JsonObject& RFrtl_433_ESPdata = jsonBuffer2.parseObject(message);
   logJson(RFrtl_433_ESPdata);
   updateDisplay(RFrtl_433_ESPdata);
+  resetTimer();
+
   count++;
 }
 void updateDisplay(JsonObject& jsondata) {
@@ -171,6 +189,7 @@ int overlaysCount = 1;
 
 
 void setup() {
+  resetTimer();
   Serial.begin(921600);
   delay(1000);
 #ifndef LOG_LEVEL
@@ -263,6 +282,15 @@ float step = stepMin;
 
 void loop() {
   rf.loop();
+  updateTimer();
+  
+  if(timer_sec > 30.0f)
+  {
+    char tmpBuffer[JSON_MSG_BUFFER] = "";
+
+      memcpy(messageBufferDisp,tmpBuffer,JSON_MSG_BUFFER*sizeof(char));
+  }
+
 ui.update();
 
 #if defined(setBitrate) || defined(setFreqDev) || defined(setRxBW)

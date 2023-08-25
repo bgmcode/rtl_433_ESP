@@ -5,63 +5,91 @@
    This motion sensor is pretty primitive, but the price is good.  It only sends
    messages when it see's motion, and has no motion clear message.  It also does
    not appear to send battery levels or low battery.  It does send regular heartbeats though ( every 2 hours )
+pulse_demod_pwm(): Analyzer Device
+bitbuffer:: Number of rows: 49 
+[00] { 1} 80          : 1
+[01] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[02] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[03] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[04] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[05] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[06] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[07] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[08] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[09] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[10] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[11] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[12] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[13] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[14] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[15] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[16] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[17] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[18] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[19] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[20] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[21] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[22] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[23] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[24] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[25] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[26] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[27] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[28] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[29] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[30] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[31] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[32] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[33] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[34] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[35] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[36] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[37] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[38] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[39] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[40] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[41] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[42] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[43] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[44] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[45] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[46] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[47] {25} 5a a6 ad 80 : 01011010 10100110 10101101 1
+[48] {24} 5a a6 ad    : 01011010 10100110 10101101 
 
-   2018-09-26 21:25:07 :	Skylink motion sensor   :	00000
-   pulse_demod_ppm(): Skylink HA-434TL motion sensor
-   bitbuffer:: Number of rows: 2
-   [00] { 0}           :
-   [01] {17} be 3e 80  : 10111110 00111110 1
-   Pulse data: 19 pulses
-   [  0] Pulse:  507, Gap:  498, Period: 1005   Assuming signal preamble
-   [  1] Pulse:  134, Gap:  381, Period:  515   1
-   [  2] Pulse:  135, Gap:  126, Period:  261   0
-   [  3] Pulse:  134, Gap:  382, Period:  516   1
-   [  4] Pulse:  135, Gap:  383, Period:  518   1
-   [  5] Pulse:  134, Gap:  382, Period:  516   1
-   [  6] Pulse:  135, Gap:  382, Period:  517   1
-   [  7] Pulse:  134, Gap:  382, Period:  516   1
-   [  8] Pulse:  135, Gap:  125, Period:  260   0
-   [  9] Pulse:  135, Gap:  125, Period:  260   0
-   [ 10] Pulse:  134, Gap:  126, Period:  260   0
-   [ 11] Pulse:  134, Gap:  382, Period:  516   1
-   [ 12] Pulse:  134, Gap:  382, Period:  516   1
-   [ 13] Pulse:  135, Gap:  381, Period:  516   1
-   [ 14] Pulse:  136, Gap:  381, Period:  517   1
-   [ 15] Pulse:  136, Gap:  381, Period:  517   1
-   [ 16] Pulse:  135, Gap:  125, Period:  260   0
-   [ 17] Pulse:  135, Gap:  383, Period:  518   1
-   [ 18] Pulse:  134, Gap: 5071, Period: 5205   End of message
+Detected OOK package	@2.031616s
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+time      : @2.031616s
+model     : Akhan-100F14 ID (20bit): 0xa5595
+Data (4bit): 0x2 (Unlock)
+Analyzing pulses...
+Total count:   41,  width: 65.56 ms		(16390 S)
+Pulse width distribution:
+ [ 0] count:   22,  width:  352 us [348;360]	(  88 S)
+ [ 1] count:   18,  width:  956 us [956;968]	( 239 S)
+ [ 2] count:    1,  width:   68 us [68;68]	(  17 S)
+Gap width distribution:
+ [ 0] count:    2,  width: 9344 us [9344;9348]	(2336 S)
+ [ 1] count:   18,  width:  252 us [244;260]	(  63 S)
+ [ 2] count:   20,  width:  856 us [852;868]	( 214 S)
+Pulse period distribution:
+ [ 0] count:    2,  width: 9696 us [9696;9700]	(2424 S)
+ [ 1] count:   38,  width: 1212 us [1208;1220]	( 303 S)
+Pulse timing distribution:
+ [ 0] count:   22,  width:  352 us [348;360]	(  88 S)
+ [ 1] count:   38,  width:  904 us [852;968]	( 226 S)
+ [ 2] count:    1,  width:   68 us [68;68]	(  17 S)
+ [ 3] count:    3,  width: 9564 us [9344;10004]	(2391 S)
+ [ 4] count:   18,  width:  252 us [244;260]	(  63 S)
+Level estimates [high, low]:  15774,    440
+RSSI: -0.2 dB SNR: 15.5 dB Noise: -15.7 dB
+Frequency offsets [F1, F2]:     939,      0	(+3.6 kHz, +0.0 kHz)
+Guessing modulation: Pulse Width Modulation with sync/delimiter
+view at https://triq.org/pdv/#AAB00D0501016003880044255C00FC8355+AAB0250501016003880044255C00FC9481948181948194819481949481819481948194818194818355+AAB01B0501016003880044255C00FC9481948181948194819481949481A355
+Attempting demodulation... short_width: 352, long_width: 956, reset_limit: 9352, sync_width: 68
+Use a flex decoder with -X 'n=name,m=OOK_PWM,s=352,l=956,r=9352,g=0,t=0,y=68'
 
-   This is transmitted roughly every 2 hours
 
-   {"time" : "2018-09-27 06:55:50", "model" : "Skylink motion sensor", "code" : "5e3e8"}
-   pulse_demod_ppm(): Skylink HA-434TL motion sensor
-   bitbuffer:: Number of rows: 2
-   [00] { 3} e0        : 111
-   [01] {17} 5e 3e 80  : 01011110 00111110 1
-   Pulse data: 22 pulses
-   [  0] Pulse:   12, Gap:  269, Period:  281
-   [  1] Pulse:   13, Gap:  269, Period:  282
-   [  2] Pulse:   10, Gap:  235, Period:  245
-   [  3] Pulse:  506, Gap:  499, Period: 1005  Assuming signal preamble
-   [  4] Pulse:  132, Gap:  127, Period:  259  0
-   [  5] Pulse:  132, Gap:  385, Period:  517  1
-   [  6] Pulse:  132, Gap:  127, Period:  259  0
-   [  7] Pulse:  133, Gap:  384, Period:  517  1
-   [  8] Pulse:  132, Gap:  385, Period:  517
-   [  9] Pulse:  132, Gap:  385, Period:  517
-   [ 10] Pulse:  132, Gap:  384, Period:  516
-   [ 11] Pulse:  132, Gap:  128, Period:  260
-   [ 12] Pulse:  132, Gap:  128, Period:  260
-   [ 13] Pulse:  132, Gap:  127, Period:  259
-   [ 14] Pulse:  132, Gap:  384, Period:  516
-   [ 15] Pulse:  133, Gap:  384, Period:  517
-   [ 16] Pulse:  133, Gap:  383, Period:  516
-   [ 17] Pulse:  133, Gap:  384, Period:  517
-   [ 18] Pulse:  133, Gap:  383, Period:  516
-   [ 19] Pulse:  133, Gap:  128, Period:  261
-   [ 20] Pulse:  132, Gap:  384, Period:  516
-   [ 21] Pulse:  133, Gap: 5061, Period: 5194
    new_tmplate callback:
 
  *
@@ -82,7 +110,7 @@ static int reolink_doorbell_callback(r_device* decoder, bitbuffer_t* bitbuffer) 
 
   for (int i = 0; i < bitbuffer->num_rows; ++i) {
     b = bitbuffer->bb[i];
-    if (bitbuffer->bits_per_row[i] <24)
+    if (bitbuffer->bits_per_row[i] ==25)
       continue;
 
     {
@@ -91,9 +119,9 @@ static int reolink_doorbell_callback(r_device* decoder, bitbuffer_t* bitbuffer) 
       // [01] {17} 5a a6 ad 80  : 01011010  10100110 10101101  10000000  -- No motion
 
       // The last row should be the signal
-      if (i + 1 != bitbuffer->num_rows) {
-        continue;
-      }
+    //  if (i + 1 != bitbuffer->num_rows) {
+      //  continue;
+      //}
 
     //  raw = code = ((b[0]) << 20) | (b[1] << 12) | (b[2] << 4) | (b[3] >> 4);
     //  code = (b[0] << 12) | (b[1] << 4) | (b[2] >> 4);
@@ -133,8 +161,8 @@ r_device const reolink_doorbell = {
         .short_width = 352,
         .long_width  = 956,
         .reset_limit = 9800,
-        .gap_limit   = 950,
-		.tolerance   = 242,
+        .gap_limit   = 0,
+		.tolerance   = 100,
         .decode_fn   = &reolink_doorbell_callback,
         .fields      = output_fields,
 };
