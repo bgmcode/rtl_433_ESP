@@ -158,5 +158,6 @@ r_device const cotech_36_7959 = {
         .gap_limit   = 1200, // Not used
         .reset_limit = 1200, // Packet gap is 5400 us.
         .decode_fn   = &cotech_36_7959_decode,
+		.disabled	 = 1,
         .fields      = cotech_36_7959_output_fields,
 };

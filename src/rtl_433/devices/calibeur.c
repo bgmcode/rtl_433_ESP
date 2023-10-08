@@ -133,5 +133,6 @@ r_device const calibeur_RF104 = {
         .reset_limit = 3200, // Longest gap (2960-760µs)
         .sync_width  = 1560, // Startbit 1560µs
         .decode_fn   = &calibeur_rf104_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

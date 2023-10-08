@@ -134,5 +134,6 @@ r_device const acurite_01185m = {
         .gap_limit   = 3000, // long gap is 2028 us, sync gap is 4080 us
         .reset_limit = 6000, // no packet gap, sync gap is 4080 us
         .decode_fn   = &acurite_01185m_decode,
+        .disabled    = 1,
         .fields      = acurite_01185m_output_fields,
 };

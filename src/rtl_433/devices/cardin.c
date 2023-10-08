@@ -125,5 +125,6 @@ r_device const cardin = {
         .gap_limit   = 1600,
         .reset_limit = 32000,
         .decode_fn   = &cardin_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

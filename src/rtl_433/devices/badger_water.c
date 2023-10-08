@@ -157,5 +157,6 @@ r_device const badger_orion = {
         .long_width  = 10,   // NRZ encoding (bit width = pulse width)
         .reset_limit = 1000, //
         .decode_fn   = &badger_orion_decode,
+		.disabled	 = 1,
         .fields      = badger_output_fields,
 };

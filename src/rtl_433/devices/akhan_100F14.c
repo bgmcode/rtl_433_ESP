@@ -78,5 +78,6 @@ r_device const akhan_100F14 = {
         .sync_width  = 0,
         .tolerance   = 80, // us
         .decode_fn   = &akhan_rke_callback,
+        .disabled    = 1,
         .fields      = output_fields,
 };

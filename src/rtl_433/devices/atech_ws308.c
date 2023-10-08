@@ -135,5 +135,6 @@ r_device const atech_ws308 = {
         .gap_limit   = 2500,
         .reset_limit = 9000,
         .decode_fn   = &atech_ws308_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

@@ -127,5 +127,6 @@ r_device const cmr113 = {
         .reset_limit = 2069,
         .tolerance   = 200,
         .decode_fn   = &cmr113_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

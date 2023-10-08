@@ -23,7 +23,7 @@
 
 // Install https://github.com/PaulStoffregen/Time
 #include <TimeLib.h>
-
+#define PINOUT_DOORBELL 12
 
 const uint8_t activeSymbol[] PROGMEM = {
     B00000000,
@@ -59,6 +59,12 @@ int clockCenterX = screenW / 2;
 int clockCenterY = ((screenH/12)); // - 16) / 2) + 16; // top yellow part is 16 px height
 int clockRadius = 23;
 
+String timeLastRing = "";
+String timeclockstring = "";
+String lastRingString = "";
+String ringStateString = "";
+
+int numRings = 0;
 
 #ifndef RF_MODULE_FREQUENCY
 #  define RF_MODULE_FREQUENCY 433.92
@@ -77,6 +83,15 @@ int count = 0;
 double timer_sec = 0;
 double startTime = 0;
 
+bool doorbell_ringing = false;
+bool doorbell_lockout = false;
+
+int doorbell_counter_max = 2000;
+int doorbell_counter = 0;
+int doorbell_milli_start = 0;
+int doorbell_lockout_counter_max = 5000;
+bool test_code = false;
+
 void resetTimer()
 {
   startTime = millis();
@@ -88,10 +103,23 @@ void updateTimer()
   timer_sec = (millis() - startTime)/1000.0f;
 }
 
+void ringDoorbell()
+{
+if(doorbell_lockout == false)
+  {
+  doorbell_ringing = true;
+  doorbell_milli_start = millis();
+  numRings++;
+  timeLastRing = timeclockstring;
+  lastRingString = String("Num Rings:") + String(numRings) + "\n Prev: " + timeLastRing;
+  }
+}
+
 
 void rtl_433_Callback(char* message) {
   DynamicJsonBuffer jsonBuffer2(JSON_MSG_BUFFER);
   JsonObject& RFrtl_433_ESPdata = jsonBuffer2.parseObject(message);
+  ringDoorbell();
   logJson(RFrtl_433_ESPdata);
   updateDisplay(RFrtl_433_ESPdata);
   resetTimer();
@@ -137,7 +165,6 @@ void jsonOverlay(OLEDDisplay *display, OLEDDisplayUiState* state)
 {
 }
 
-
 void jsonFrame(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
   
  // char tmpjson[] = "'model':'Oregon-CM180i','id':128,'battery_ok':1,'power1_W':48,'power2_W':9289,'power3_W':8243,'sequence':9,'protocol':'Oregon Scientific Weather Sensor','rssi':-87,'duration':288001'";
@@ -164,12 +191,29 @@ int lineLength = 20;
   display->drawString(clockCenterX + x , clockCenterY + y, jsonnow);
 }
 
+void countOverlay(OLEDDisplay *display, OLEDDisplayUiState* state)
+{
+}
+
+void countFrame(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
+ 
+  display->setTextAlignment(TEXT_ALIGN_CENTER);
+  display->setFont(ArialMT_Plain_10);
+  display->drawString(clockCenterX + x , clockCenterY + y,ringStateString + "\n" + lastRingString + "\n" + timeclockstring);
+
+
+}
+
 void clockOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
 
 }
 
+void updateClock()
+{
+  timeclockstring = String(hour()) + ":" + twoDigits(minute()) + ":" + twoDigits(second());
+}
 void digitalClockFrame(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
-  String timenow = String(hour()) + ":" + twoDigits(minute()) + ":" + twoDigits(second());
+  String timenow = timeclockstring;
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->setFont(ArialMT_Plain_24);
   display->drawString(clockCenterX + x , clockCenterY + y, timenow );
@@ -178,17 +222,23 @@ void digitalClockFrame(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t 
 
 // This array keeps function pointers to all frames
 // frames are the single views that slide in
-FrameCallback frames[] = { jsonFrame };
+//FrameCallback frames[] = { jsonFrame };
+FrameCallback frames[] = { countFrame };
 
 // how many frames are there?
 int frameCount = 1;
 
 // Overlays are statically drawn on top of a frame eg. a clock
-OverlayCallback overlays[] = { jsonOverlay };
+//OverlayCallback overlays[] = { jsonOverlay };
+OverlayCallback overlays[] = { countOverlay };
+
 int overlaysCount = 1;
 
 
 void setup() {
+  pinMode(PINOUT_DOORBELL, OUTPUT);
+  digitalWrite(PINOUT_DOORBELL,LOW);
+
   resetTimer();
   Serial.begin(921600);
   delay(1000);
@@ -203,11 +253,10 @@ void setup() {
   rf.enableReceiver();
   Log.notice(F("****** setup complete ******" CR));
   rf.getModuleStatus();
-
-
-    ui.setTargetFPS(60);
+ 
+  ui.setTargetFPS(60);
   ui.setActiveSymbol(activeSymbol);
-  ui.setInactiveSymbol(inactiveSymbol);
+  //ui.setInactiveSymbol(inactiveSymbol);
 
   // You can change this to
   // TOP, LEFT, BOTTOM, RIGHT
@@ -219,6 +268,7 @@ void setup() {
   // You can change the transition that is used
   // SLIDE_LEFT, SLIDE_RIGHT, SLIDE_UP, SLIDE_DOWN
   ui.setFrameAnimation(SLIDE_LEFT);
+  ui.disableAutoTransition();
 
   // Add frames
   ui.setFrames(frames, frameCount);
@@ -228,6 +278,7 @@ void setup() {
 
   // Initialising the UI will init the display too.
   ui.init();
+  ui.disableAllIndicators();
 
   display.flipScreenVertically();
 }
@@ -281,6 +332,53 @@ float step = stepMin;
 #endif
 
 void loop() {
+
+  updateClock();
+
+  if(doorbell_ringing==true)
+  {
+    ringStateString = "Doorbell Ringing";
+
+    digitalWrite(PINOUT_DOORBELL,HIGH);
+    Serial.print("1 - doorbell ringing = true \n");
+    doorbell_counter = millis() - doorbell_milli_start;
+    if(doorbell_counter>doorbell_counter_max)
+    {
+      Serial.print("2 - doorbell done ringing \n");
+        doorbell_ringing = false;
+        doorbell_lockout = true;
+
+        doorbell_milli_start = millis();
+        digitalWrite(PINOUT_DOORBELL,LOW);
+    }
+  }
+  else if(doorbell_lockout == true)
+  {
+        digitalWrite(PINOUT_DOORBELL,LOW);
+
+    ringStateString = "Doorbell Lockout";
+
+      Serial.print("3 - doorbell lockout = true \n");
+      doorbell_counter = millis() - doorbell_milli_start;
+      if(doorbell_counter > doorbell_lockout_counter_max)
+      {
+        Serial.print("4 - doorbell lockout = false \n");
+        doorbell_lockout = false;
+      }
+  }
+  else if(test_code == true)
+  {
+    Serial.print("5 - Test Code True \n");
+    doorbell_lockout_counter_max = 5000;
+    doorbell_counter_max = 5000;
+
+    if(doorbell_lockout==false){
+    ringDoorbell();}
+  }
+  else{
+        ringStateString = "Doorbell Armed";
+  }
+
   rf.loop();
   updateTimer();
   

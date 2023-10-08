@@ -132,5 +132,6 @@ r_device const current_cost = {
         .long_width  = 250, // NRZ
         .reset_limit = 8000,
         .decode_fn   = &current_cost_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

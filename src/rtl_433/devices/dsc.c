@@ -269,6 +269,7 @@ r_device const dsc_security = {
         .long_width  = 500,  // Bit period, 500 µs
         .reset_limit = 5000, // Max gap,
         .decode_fn   = &dsc_callback,
+		.disabled	 = 1,
         .fields      = output_fields,
 };
 
@@ -280,5 +281,6 @@ r_device const dsc_security_ws4945 = {
         .long_width  = 1072, // Bit period, 1072 µs
         .reset_limit = 9000, // Max gap, based on 8 zero bits between sync bit
         .decode_fn   = &dsc_callback,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

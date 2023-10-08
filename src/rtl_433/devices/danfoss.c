@@ -164,5 +164,6 @@ r_device const danfoss_CFR = {
         .long_width  = 100, // Bit width
         .reset_limit = 500, // Maximum run is 4 zeroes/ones
         .decode_fn   = &danfoss_cfr_callback,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

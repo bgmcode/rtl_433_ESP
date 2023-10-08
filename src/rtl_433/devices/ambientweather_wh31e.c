@@ -382,5 +382,6 @@ r_device const ambientweather_wh31e = {
         .reset_limit = 1500,
         .gap_limit   = 1800,
         .decode_fn   = &ambientweather_whx_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

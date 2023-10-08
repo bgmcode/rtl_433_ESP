@@ -117,5 +117,6 @@ r_device const auriol_ahfl = {
         .gap_limit   = 4248,
         .reset_limit = 9150,
         .decode_fn   = &auriol_ahfl_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

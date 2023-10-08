@@ -138,5 +138,6 @@ r_device const cavius = {
         .gap_limit   = 1000,
         .reset_limit = 1000,
         .decode_fn   = &cavius_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

@@ -115,5 +115,6 @@ r_device const bresser_3ch = {
         .gap_limit   = 625,  // long gap (with short pulse) is ~500 us, sync gap is ~750 us
         .reset_limit = 1250, // maximum gap is 1000 us (long gap + longer sync gap on last repeat)
         .decode_fn   = &bresser_3ch_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

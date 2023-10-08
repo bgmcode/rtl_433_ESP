@@ -150,5 +150,6 @@ r_device const celsia_czc1 = {
         .reset_limit = 4880, // larger than gap between start pulse and first frame (6644 us = 11 x nominal bit width) to put start pulse and first frame in two rows, but smaller than inter-frame space of 30415 us
         .tolerance   = 20,
         .decode_fn   = &celsia_czc1_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

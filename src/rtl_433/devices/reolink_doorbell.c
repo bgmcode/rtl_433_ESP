@@ -1,10 +1,5 @@
-/* skylink off-brand wireless motion sensor and alarm system on 433.3MHz
- * Skylink HA-434TL
- *
+/* Reolink POE Doorbell
 
-   This motion sensor is pretty primitive, but the price is good.  It only sends
-   messages when it see's motion, and has no motion clear message.  It also does
-   not appear to send battery levels or low battery.  It does send regular heartbeats though ( every 2 hours )
 pulse_demod_pwm(): Analyzer Device
 bitbuffer:: Number of rows: 49 
 [00] { 1} 80          : 1
@@ -116,15 +111,13 @@ static int reolink_doorbell_callback(r_device* decoder, bitbuffer_t* bitbuffer) 
     {
       if (decoder->verbose > 1)
         fprintf(stderr, "%s: rows %d row %i bits %d\n", __func__, bitbuffer->num_rows, i, bitbuffer->bits_per_row[i]);
-      // [01] {17} 5a a6 ad 80  : 01011010  10100110 10101101  10000000  -- No motion
+      // [01] {25} 5a a6 ad 80  : 01011010  10100110 10101101  10000000 
 
       // The last row should be the signal
     //  if (i + 1 != bitbuffer->num_rows) {
       //  continue;
       //}
 
-    //  raw = code = ((b[0]) << 20) | (b[1] << 12) | (b[2] << 4) | (b[3] >> 4);
-    //  code = (b[0] << 12) | (b[1] << 4) | (b[2] >> 4);
       raw = code = ((b[0]) << 16) | (b[1] << 8) | (b[2] << 0);
       code = (b[0] << 16) | (b[1] << 8) | (b[2] >> 0);
       if (code != 0x5aa6ad)
@@ -162,7 +155,7 @@ r_device const reolink_doorbell = {
         .long_width  = 956,
         .reset_limit = 9800,
         .gap_limit   = 0,
-		.tolerance   = 100,
+		    .tolerance   = 100,
         .decode_fn   = &reolink_doorbell_callback,
         .fields      = output_fields,
 };

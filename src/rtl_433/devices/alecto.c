@@ -231,5 +231,6 @@ r_device const alectov1 = {
         .gap_limit   = 7000,
         .reset_limit = 10000,
         .decode_fn   = &alectov1_callback,
+        .disabled    = 1,
         .fields      = output_fields,
 };

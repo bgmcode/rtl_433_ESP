@@ -225,5 +225,6 @@ r_device const digitech_xc0324 = {
         .long_width  = 1000, // = 250 * 4
         .reset_limit = 3000,
         .decode_fn   = &digitech_xc0324_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

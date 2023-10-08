@@ -70,5 +70,6 @@ r_device const blyss = {
         .gap_limit   = 2500,
         .reset_limit = 8000,
         .decode_fn   = &blyss_callback,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

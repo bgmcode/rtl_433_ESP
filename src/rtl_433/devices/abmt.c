@@ -97,4 +97,5 @@ r_device const abmt = {
         .reset_limit = 5000,
         .decode_fn   = &abmt_callback,
         .fields      = output_fields,
+        .disabled    = 1,
 };

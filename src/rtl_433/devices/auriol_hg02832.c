@@ -110,5 +110,6 @@ r_device const auriol_hg02832 = {
         .gap_limit   = 750,
         .reset_limit = 62990, // 61ms packet gap
         .decode_fn   = &auriol_hg02832_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

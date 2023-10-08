@@ -189,5 +189,6 @@ r_device const ecodhome = {
         .long_width  = 250,
         .reset_limit = 6000,
         .decode_fn   = &ecodhome_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

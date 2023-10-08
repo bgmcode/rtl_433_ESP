@@ -126,5 +126,6 @@ r_device const auriol_afw2a1 = {
         .gap_limit   = 2012,
         .reset_limit = 3954,
         .decode_fn   = &auriol_afw2a1_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

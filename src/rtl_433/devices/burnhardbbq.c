@@ -142,5 +142,6 @@ r_device const burnhardbbq = {
         .sync_width  = 840,
         .reset_limit = 848,
         .decode_fn   = &burnhardbbq_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

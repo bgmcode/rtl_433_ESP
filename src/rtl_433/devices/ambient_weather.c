@@ -175,5 +175,6 @@ r_device const ambient_weather = {
         .long_width  = 0, // not used
         .reset_limit = 2400,
         .decode_fn   = &ambient_weather_callback,
+        .disabled    = 1,
         .fields      = output_fields,
 };

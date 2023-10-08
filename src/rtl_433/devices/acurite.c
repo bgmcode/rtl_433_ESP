@@ -1883,6 +1883,7 @@ r_device const acurite_rain_896 = {
         .reset_limit = 5000,
         .decode_fn   = &acurite_rain_896_decode,
         .priority    = 10, // Eliminate false positives by letting oregon scientific v1 protocol go earlier
+		.disabled	 = 1,
         .fields      = acurite_rain_gauge_output_fields,
 };
 
@@ -1950,6 +1951,8 @@ r_device const acurite_txr = {
         .gap_limit   = 500,  // longest data gap is 392 us, sync gap is 596 us
         .reset_limit = 4000, // packet gap is 2192 us
         .decode_fn   = &acurite_txr_callback,
+		.disabled	 = 1,
+
         .fields      = acurite_txr_output_fields,
 };
 
@@ -1982,6 +1985,7 @@ r_device const acurite_986 = {
         .gap_limit   = 1280,
         .reset_limit = 4000,
         .decode_fn   = &acurite_986_decode,
+		.disabled	 = 1,
         .fields      = acurite_986_output_fields,
 };
 
@@ -2026,6 +2030,7 @@ r_device const acurite_606 = {
         .gap_limit   = 7000,
         .reset_limit = 10000,
         .decode_fn   = &acurite_606_decode,
+		.disabled	 = 1,
         .fields      = acurite_606_output_fields,
 };
 
@@ -2052,6 +2057,7 @@ r_device const acurite_00275rm = {
         .reset_limit = 708, // no packet gap, sync gap is 592 us
         .sync_width  = 632, // sync pulse is 632 us
         .decode_fn   = &acurite_00275rm_decode,
+		.disabled	 = 1,
         .fields      = acurite_00275rm_output_fields,
 };
 
@@ -2064,5 +2070,7 @@ r_device const acurite_590tx = {
         .reset_limit = 3000,          // no packet gap, sync gap is 592 us
         .sync_width  = 500,           // sync pulse is 632 us
         .decode_fn   = &acurite_590tx_decode,
+		.disabled	 = 1,
         .fields      = acurite_590_output_fields,
+        .disabled    = 1,
 };

@@ -137,5 +137,6 @@ r_device const ambientweather_tx8300 = {
         .gap_limit   = 6500,
         .reset_limit = 8000,
         .decode_fn   = &ambientweather_tx8300_callback,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

@@ -104,5 +104,6 @@ r_device const chuango = {
         .sync_width  = 0,    // No sync bit used
         .tolerance   = 160,  // us
         .decode_fn   = &chuango_callback,
+		.disabled	 = 1,
         .fields      = output_fields,
 };

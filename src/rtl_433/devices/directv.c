@@ -379,5 +379,6 @@ r_device const directv = {
                               // signal decoder before recognizing row repeats in signal
         .reset_limit = 50000, // maximum gap size before End Of Row [μs]
         .decode_fn   = &directv_decode,
+		.disabled	 = 1,
         .fields      = output_fields,
 };
