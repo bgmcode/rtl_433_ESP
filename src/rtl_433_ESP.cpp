@@ -564,6 +564,10 @@ void rtl_433_ESP::rtl_433_ReceiverTask(void* pvParameters) {
           signalRssi = currentRssi;
           _lastChange = micros();
 
+          if (_signalStartCallback) {
+            _signalStartCallback(currentRssi);
+          }
+
           if (_noiseCount > 100) {
 #ifdef AUTOOOKFIX
 #  if defined(RF_SX1276) || defined(RF_SX1278)
@@ -625,6 +629,12 @@ void rtl_433_ESP::rtl_433_ReceiverTask(void* pvParameters) {
 #endif
             messageCount++;
             gapStart = micros();
+
+            if (_pulseTrainCallback) {
+              _pulseTrainCallback(
+                  &_pulseTrains[_actualPulseTrain]);
+            }
+
             _actualPulseTrain = (_actualPulseTrain + 1) % RECEIVER_BUFFER_SIZE;
             _nrpulses = 0;
           } else {
@@ -668,6 +678,9 @@ rtl_433_ESPCallBack _callback; // TODO: Use global object
 char* _messageBuffer;
 int _bufferSize;
 
+rtl_433_SignalStartCallBack _signalStartCallback = nullptr;
+PulseTrainCallBack _pulseTrainCallback = nullptr;
+
 void rtl_433_ESP::setCallback(rtl_433_ESPCallBack callback, char* messageBuffer,
                               int bufferSize) {
   // logprintfLn(LOG_DEBUG, "rtl_433_ESP::setCallback location: %p", callback);
@@ -677,10 +690,18 @@ void rtl_433_ESP::setCallback(rtl_433_ESPCallBack callback, char* messageBuffer,
   _setCallback(callback, messageBuffer, bufferSize);
 }
 
+void rtl_433_ESP::setSignalStartCallback(rtl_433_SignalStartCallBack callback) {
+  _signalStartCallback = callback;
+}
+
+void rtl_433_ESP::setPulseTrainCallback(PulseTrainCallBack callback) {
+  _pulseTrainCallback = callback;
+}
+
 /**
  * @brief Set delta applied to average RSSI level for determining start and end of signal
- * 
- * @param newRssi 
+ *
+ * @param newRssi
  */
 void rtl_433_ESP::setRSSIThreshold(int newRssi) {
   rssiThresholdDelta = newRssi;

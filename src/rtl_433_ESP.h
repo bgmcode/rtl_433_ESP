@@ -31,6 +31,7 @@
 #include <functional>
 
 #include "log.h"
+#include "pulse_data.h"
 #include "tools/aprintf.h"
 
 // ESP32 doesn't define ICACHE_RAM_ATTR
@@ -227,8 +228,21 @@
  */
 typedef void (*rtl_433_ESPCallBack)(char* message);
 
-typedef std::function<void(const uint16_t* pulses, size_t length)>
-    PulseTrainCallBack;
+/**
+ * Fired when RSSI threshold is crossed and a signal starts being received.
+ * rssi - RSSI level at signal start (dBm)
+ * Called from rtl_433_ReceiverTask (core 0). Keep the callback short.
+ */
+typedef void (*rtl_433_SignalStartCallBack)(int rssi);
+
+/**
+ * Fired after pulse collection is complete, before the signal is queued
+ * for decoding. Provides the raw pulse/gap data so the application can
+ * act on a detected signal without waiting for full protocol decoding.
+ * pulses - pointer to the collected pulse_data_t (valid only during callback)
+ * Called from rtl_433_ReceiverTask (core 0). Keep the callback short.
+ */
+typedef std::function<void(pulse_data_t* pulses)> PulseTrainCallBack;
 
 class rtl_433_ESP {
 public:
@@ -256,6 +270,24 @@ public:
    */
   void setCallback(rtl_433_ESPCallBack callback, char* messageBuffer,
                    int bufferSize);
+
+  /**
+   * Set callback fired when a signal is first detected (RSSI threshold crossed),
+   * before any pulses have been collected. Use this for the earliest possible
+   * notification that RF activity is present.
+   *
+   * callback fires on rtl_433_ReceiverTask (core 0) — keep it brief.
+   */
+  static void setSignalStartCallback(rtl_433_SignalStartCallBack callback);
+
+  /**
+   * Set callback fired after pulse collection is complete but before the signal
+   * is queued for protocol decoding. The pulse_data_t pointer is only valid
+   * for the duration of the callback.
+   *
+   * callback fires on rtl_433_ReceiverTask (core 0) — keep it brief.
+   */
+  static void setPulseTrainCallback(PulseTrainCallBack callback);
 
   /**
    * Set minumum RSSI value for receiver
