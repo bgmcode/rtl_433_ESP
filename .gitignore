@@ -8,3 +8,4 @@ tools/copy.list
 tools/devices.list
 tools/rtl_433_ESP.fragment
 example/OOK_Receiver/compile_commands.json
+trading/__pycache__/
