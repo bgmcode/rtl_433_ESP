@@ -294,6 +294,27 @@ public:
    */
   void setRSSIThreshold(int);
 
+  /**
+   * Set the minimum signal gap duration (in microseconds) used for two purposes:
+   *  1. Gap bridging: a dropout shorter than this keeps the current signal window
+   *     open, so multiple bursts with short gaps are collected as one signal.
+   *  2. Minimum valid signal length: signals shorter than this are discarded.
+   *
+   * Default: MINIMUM_SIGNAL_LENGTH (40 000 µs for OOK, 5 000 µs for FSK).
+   *
+   * Reducing this value causes the receiver to close the signal window sooner
+   * after each burst, which lets the decoder attempt decoding per-repetition
+   * rather than waiting for an entire multi-repetition transmission to finish.
+   * For a doorbell that repeats its code with ~50–200 ms gaps, setting this to
+   * ~10 000–20 000 µs will fire the decoded callback after the first repetition.
+   *
+   * Tip: if you see "ignored signal" log entries after tuning, the value is
+   * too low and individual bursts are being rejected as too short.
+   */
+  static void setMinimumSignalLength(unsigned long microseconds);
+
+  static unsigned long minimumSignalLength;
+
 #if defined(RF_SX1276) || defined(RF_SX1278)
   /**
    * Set setOOKThreshold

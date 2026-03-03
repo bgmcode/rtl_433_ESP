@@ -109,6 +109,8 @@ int rtl_433_ESP::rssiThresholdDelta = RSSI_THRESHOLD;
 
 bool rtl_433_ESP::ookModulation = OOK_MODULATION; // Defaults to true
 
+unsigned long rtl_433_ESP::minimumSignalLength = MINIMUM_SIGNAL_LENGTH;
+
 int _totalRssi = 0;
 int _rssiCount = 0;
 
@@ -590,12 +592,12 @@ void rtl_433_ESP::rtl_433_ReceiverTask(void* pvParameters) {
       }
 #if defined(RF_SX1276) || defined(RF_SX1278)
       // If we received a signal but had a minor drop in strength keep the
-      // receiver running for an additional 150,000
-      else if (micros() - signalEnd < MINIMUM_SIGNAL_LENGTH)
+      // receiver running for another minimumSignalLength microseconds
+      else if (micros() - signalEnd < minimumSignalLength)
 #else
       // If we received a signal but had a minor drop in strength keep the
-      // receiver running for an additional 40,000
-      else if (micros() - signalEnd < MINIMUM_SIGNAL_LENGTH && micros() - signalStart > 30000)
+      // receiver running for another minimumSignalLength microseconds
+      else if (micros() - signalEnd < minimumSignalLength && micros() - signalStart > 30000)
       // else if (micros() - signalEnd < PD_MAX_GAP_MS)
 #endif
       {
@@ -611,7 +613,7 @@ void rtl_433_ESP::rtl_433_ReceiverTask(void* pvParameters) {
           totalSignals++;
           if ((_nrpulses > PD_MIN_PULSES) &&
               ((signalEnd - signalStart) >
-               MINIMUM_SIGNAL_LENGTH)) // Minumum signal length of MINIMUM_SIGNAL_LENGTH MS
+               minimumSignalLength)) // Minimum signal length of minimumSignalLength µs
           {
             _pulseTrains[_actualPulseTrain].num_pulses = _nrpulses + 1;
             _pulseTrains[_actualPulseTrain].signalDuration =
@@ -688,6 +690,10 @@ void rtl_433_ESP::setCallback(rtl_433_ESPCallBack callback, char* messageBuffer,
   _messageBuffer = messageBuffer;
   _bufferSize = bufferSize;
   _setCallback(callback, messageBuffer, bufferSize);
+}
+
+void rtl_433_ESP::setMinimumSignalLength(unsigned long microseconds) {
+  minimumSignalLength = microseconds;
 }
 
 void rtl_433_ESP::setSignalStartCallback(rtl_433_SignalStartCallBack callback) {
